@@ -74,23 +74,29 @@ class _HomeScreenState extends State<HomeScreen> {
         Flexible(
           flex: 3,
           child: Center(
-            child: GestureDetector(
-              onLongPress: () {
-                // clearTime
-                setState(() {
-                  isRunning = false;
-                  totalSeconds = timerSecond;
-                });
-                timer.cancel();
-              },
-              child: IconButton(
-                iconSize: 120,
-                color: Theme.of(context).cardColor,
-                onPressed: isRunning ? onPausePressed : onStartPressed,
-                icon: Icon(isRunning
-                    ? Icons.pause_circle_outline
-                    : Icons.play_circle_outline),
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onLongPress: onClearTimer,
+                  child: IconButton(
+                    iconSize: 120,
+                    color: Theme.of(context).cardColor,
+                    onPressed: isRunning ? onPausePressed : onStartPressed,
+                    icon: Icon(isRunning
+                        ? Icons.pause_circle_outline
+                        : Icons.play_circle_outline),
+                  ),
+                ),
+                IconButton(
+                  onPressed: onClearTimer,
+                  icon: Icon(
+                    Icons.restart_alt_outlined,
+                    color: Theme.of(context).cardColor,
+                  ),
+                  iconSize: 80,
+                )
+              ],
             ),
           ),
         ),
@@ -134,5 +140,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ]),
     );
+  }
+
+  void onClearTimer() {
+    // clearTime
+    setState(() {
+      isRunning = false;
+      totalSeconds = timerSecond;
+    });
+    timer.cancel();
   }
 }
