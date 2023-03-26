@@ -10,17 +10,40 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int totalSeconds = 1500; // 60 * 25
+  static const int timerSecond = 1500;
+
+  int totalSeconds = timerSecond; // 60 * 25
+  bool isRunning = false;
+  int totalPomodoros = 0;
   late Timer timer;
 
   void onTick(Timer timer) {
-    setState(() {
-      totalSeconds -= 1;
-    });
+    if (totalSeconds == 0) {
+      setState(() {
+        totalPomodoros += 1;
+        isRunning = false;
+        totalSeconds = timerSecond;
+      });
+      timer.cancel();
+    } else {
+      setState(() {
+        totalSeconds -= 1;
+      });
+    }
   }
 
   void onStartPressed() {
     timer = Timer.periodic(const Duration(seconds: 1), onTick);
+    setState(() {
+      isRunning = true;
+    });
+  }
+
+  void onPausePressed() {
+    timer.cancel();
+    setState(() {
+      isRunning = false;
+    });
   }
 
   @override
@@ -47,8 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: IconButton(
               iconSize: 120,
               color: Theme.of(context).cardColor,
-              onPressed: onStartPressed,
-              icon: const Icon(Icons.play_circle_outline),
+              onPressed: isRunning ? onPausePressed : onStartPressed,
+              icon: Icon(isRunning
+                  ? Icons.pause_circle_outline
+                  : Icons.play_circle_outline),
             ),
           ),
         ),
@@ -76,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          "0",
+                          "$totalPomodoros",
                           style: TextStyle(
                             fontSize: 58,
                             fontWeight: FontWeight.w600,
