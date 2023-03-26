@@ -46,6 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  String formatIntToTime(int seconds) {
+    var duration = Duration(seconds: seconds);
+
+    return duration.toString().substring(2, 7);
+    // return duration.toString().split(".").first.substring(2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              '$totalSeconds',
+              formatIntToTime(totalSeconds),
               style: TextStyle(
                   color: Theme.of(context).cardColor,
                   fontSize: 89,
@@ -101,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          "$totalPomodoros",
+                          '$totalPomodoros',
                           style: TextStyle(
                             fontSize: 58,
                             fontWeight: FontWeight.w600,
